@@ -88,7 +88,7 @@ export default function CheckoutClient({ product, initialQty }: { product: Produ
 
           <div className="mt-6">
             <FireButton href={wa} external size="lg" className="w-full">
-              Tanya & Order via WhatsApp <ArrowRight className="h-5 w-5" />
+              Order Sekarang <ArrowRight className="h-5 w-5" />
             </FireButton>
           </div>
 
