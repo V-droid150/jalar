@@ -1,6 +1,6 @@
 // ─── Konten brand JALAR (terpusat) ───────────────────────────────────────────
-// Ganti WA_NUMBER dengan nomor WhatsApp asli (format internasional tanpa +).
-export const WA_NUMBER = "6281234567890";
+// Nomor WhatsApp bisnis JALAR (format internasional tanpa +). 082113515619 → 62...
+export const WA_NUMBER = "6282113515619";
 
 export function waLink(message: string) {
   return `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(message)}`;

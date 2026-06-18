@@ -6,23 +6,32 @@ import { Minus, Plus, ArrowRight, ShieldCheck, Truck } from "lucide-react";
 import { formatIDR, waLink, type Product } from "@/lib/data";
 import FireButton from "@/components/FireButton";
 
+// URL dasar situs (untuk membentuk link gambar absolut di pesan WhatsApp).
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://jalar.vercel.app";
+
 export default function CheckoutClient({ product, initialQty }: { product: Product; initialQty: number }) {
   const [qty, setQty] = useState(initialQty);
   const dec = () => setQty((q) => Math.max(1, q - 1));
   const inc = () => setQty((q) => Math.min(99, q + 1));
 
   const subtotal = product.price * qty;
+  const imageUrl = `${SITE_URL}${product.image}`;
+
+  // Pesan bawaan WhatsApp: salam + nama, badge, harga, jumlah, total, dan foto produk.
   const wa = waLink(
-    `Halo JALAR, saya mau order:\n\nProduk: ${product.name} (${product.badge})\nJumlah: ${qty}\nTotal: ${formatIDR(
-      subtotal,
-    )}\n\nMohon dibantu untuk prosesnya ya!`,
+    `Halo kak, saya ingin bertanya tentang produk ini:\n\n` +
+      `🌶️ *${product.name}* — ${product.badge}\n` +
+      `💰 Harga: ${formatIDR(product.price)}\n` +
+      `📦 Jumlah: ${qty} (Total: ${formatIDR(subtotal)})\n` +
+      `🖼️ Foto: ${imageUrl}\n\n` +
+      `Mohon info lebih lanjut ya kak 🙏`,
   );
 
   return (
     <section className="mx-auto max-w-5xl px-5 py-14 sm:px-8 sm:py-20">
       <p className="text-xs font-semibold uppercase tracking-[0.35em] text-jalar-orange">Hampir Kepanasan</p>
       <h1 className="mt-3 font-display text-5xl text-white sm:text-6xl">Checkout</h1>
-      <p className="mt-2 text-white/60">Cek pesananmu, lalu selesaikan order. Berani lanjut?</p>
+      <p className="mt-2 text-white/60">Cek pesananmu, lalu lanjut tanya & order via WhatsApp. Berani lanjut?</p>
 
       <div className="mt-10 grid gap-7 md:grid-cols-[1.25fr_1fr]">
         {/* Item */}
@@ -63,9 +72,7 @@ export default function CheckoutClient({ product, initialQty }: { product: Produ
           <h3 className="font-display text-2xl text-white">Ringkasan</h3>
           <div className="mt-5 space-y-3 text-sm">
             <div className="flex justify-between text-white/75">
-              <span>
-                {product.name} × {qty}
-              </span>
+              <span>{product.name} × {qty}</span>
               <span>{formatIDR(subtotal)}</span>
             </div>
             <div className="flex justify-between text-white/75">
@@ -81,7 +88,7 @@ export default function CheckoutClient({ product, initialQty }: { product: Produ
 
           <div className="mt-6">
             <FireButton href={wa} external size="lg" className="w-full">
-              Pesan Sekarang <ArrowRight className="h-5 w-5" />
+              Tanya & Order via WhatsApp <ArrowRight className="h-5 w-5" />
             </FireButton>
           </div>
 
