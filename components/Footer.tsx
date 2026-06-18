@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { MessageCircle, Instagram, Mail } from "lucide-react";
 import { TAGLINE, waLink } from "@/lib/data";
 
@@ -22,8 +23,14 @@ export default function Footer() {
       <div className="mx-auto max-w-7xl px-5 sm:px-8">
         <div className="grid gap-10 md:grid-cols-3">
           <div>
-            <span className="font-display text-4xl tracking-wide text-white">JALAR</span>
-            <p className="mt-2 font-display text-xl tracking-wide text-jalar-amber">{TAGLINE}</p>
+            <Image
+              src="/images/logo.png"
+              alt="JALAR"
+              width={330}
+              height={151}
+              className="h-12 w-auto"
+            />
+            <p className="mt-3 font-display text-xl tracking-wide text-jalar-amber">{TAGLINE}</p>
           </div>
 
           <div className="flex flex-col gap-2.5 md:items-center">
@@ -56,7 +63,7 @@ export default function Footer() {
         </div>
 
         <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-white/10 pt-6 sm:flex-row">
-          <p className="text-xs text-white/30">© 2025 JALAR. All rights reserved.</p>
+          <p className="text-xs text-white/30">© {new Date().getFullYear()} JALAR. All rights reserved.</p>
           <a
             href="https://redlens.pro"
             target="_blank"

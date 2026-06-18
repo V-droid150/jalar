@@ -1,8 +1,9 @@
 "use client";
 
 import { ArrowRight } from "lucide-react";
-import { waLink } from "@/lib/data";
 import Reveal from "@/components/Reveal";
+import FireButton from "@/components/FireButton";
+import { waLink } from "@/lib/data";
 
 export default function CtaPenutup() {
   return (
@@ -23,14 +24,11 @@ export default function CtaPenutup() {
           </p>
         </Reveal>
         <Reveal delay={0.15}>
-          <a
-            href={waLink("Halo JALAR, saya mau order keripiknya. Boleh dibantu?")}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-9 inline-flex items-center gap-2 rounded-full bg-jalar-amber px-10 py-5 text-base font-bold uppercase tracking-wide text-jalar-dark transition hover:scale-[1.03] hover:brightness-110 sm:text-lg"
-          >
-            Order Sekarang <ArrowRight className="h-5 w-5" />
-          </a>
+          <div className="mt-9">
+            <FireButton href={waLink("Halo JALAR, saya mau order keripiknya!")} external size="lg">
+              Order Sekarang <ArrowRight className="h-5 w-5" />
+            </FireButton>
+          </div>
         </Reveal>
         <Reveal delay={0.2}>
           <p className="mt-6 text-xs uppercase tracking-wide text-white/70">

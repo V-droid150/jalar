@@ -6,7 +6,8 @@ import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
-import { slides, waLink } from "@/lib/data";
+import { slides } from "@/lib/data";
+import FireButton from "@/components/FireButton";
 
 function HeatRow({ heat, label, color }: { heat: number; label: string; color: string }) {
   return (
@@ -32,7 +33,7 @@ function HeatRow({ heat, label, color }: { heat: number; label: string; color: s
 
 export default function HeroSlider() {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: "center" }, [
-    Autoplay({ delay: 4000, stopOnInteraction: false, stopOnMouseEnter: true }),
+    Autoplay({ delay: 4000, stopOnInteraction: true, stopOnMouseEnter: true, stopOnFocusIn: true }),
   ]);
   const [selected, setSelected] = useState(0);
 
@@ -47,6 +48,7 @@ export default function HeroSlider() {
     emblaApi.on("reInit", onSelect);
     return () => {
       emblaApi.off("select", onSelect);
+      emblaApi.off("reInit", onSelect);
     };
   }, [emblaApi, onSelect]);
 
@@ -72,19 +74,23 @@ export default function HeroSlider() {
                 <div className="pointer-events-none absolute -left-1/4 top-0 h-[140%] w-44 rotate-12 bg-white/[0.06] blur-3xl" />
 
                 {/* Konten */}
-                <div className="relative z-10 mx-auto grid h-full max-w-7xl grid-cols-1 items-center gap-6 px-5 pb-28 pt-24 sm:px-8 md:grid-cols-2 md:gap-8 md:pb-0 md:pt-0">
+                <div className="relative z-10 mx-auto grid h-full max-w-7xl grid-cols-1 items-center gap-3 px-5 pb-20 pt-20 sm:gap-6 sm:px-8 md:grid-cols-2 md:gap-8 md:pb-0 md:pt-0">
                   {/* Teks */}
                   <div className="order-2 text-center md:order-1 md:text-left">
                     <p className="text-[11px] font-semibold uppercase tracking-[0.35em] text-white/80">
                       Keripik Pedas Artisanal
                     </p>
-                    <h1
-                      className="mt-3 font-display leading-[0.82] text-white"
-                      style={{ fontSize: "clamp(4rem, 15vw, 10rem)" }}
-                    >
-                      JALAR
-                    </h1>
-                    <p className="mt-1 font-display text-3xl tracking-wide sm:text-4xl" style={{ color: s.levelColor }}>
+                    <div className="mt-2">
+                      <Image
+                        src="/images/logo.png"
+                        alt="JALAR"
+                        width={330}
+                        height={151}
+                        priority={i === 0}
+                        className="mx-auto h-auto w-[56vw] max-w-[240px] drop-shadow-[0_8px_26px_rgba(0,0,0,0.5)] md:mx-0 md:max-w-[400px]"
+                      />
+                    </div>
+                    <p className="mt-2 font-display text-3xl tracking-wide sm:text-4xl" style={{ color: s.levelColor }}>
                       {s.level}
                     </p>
                     <p className="mt-4 text-lg italic text-white sm:text-xl" style={{ fontFamily: "Georgia, serif" }}>
@@ -92,20 +98,17 @@ export default function HeroSlider() {
                     </p>
                     <p className="mt-2 text-sm text-white/70">{s.subtext}</p>
                     <HeatRow heat={s.heat} label={s.heatLabel} color={s.levelColor} />
-                    <a
-                      href={waLink(`Halo JALAR, saya mau pesan ${s.level} (${s.heatLabel}). Boleh info?`)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="mt-7 inline-flex items-center gap-2 rounded-full bg-jalar-amber px-7 py-3.5 text-sm font-bold uppercase tracking-wide text-jalar-dark transition hover:scale-[1.03] hover:brightness-110"
-                    >
-                      {s.cta} <ArrowRight className="h-4 w-4" />
-                    </a>
+                    <div className="mt-7">
+                      <FireButton href={`/checkout?product=${s.id}&qty=1`}>
+                        {s.cta} <ArrowRight className="h-4 w-4" />
+                      </FireButton>
+                    </div>
                   </div>
 
                   {/* Gambar produk */}
                   <div className="order-1 flex items-center justify-center md:order-2">
                     <motion.div
-                      className="relative aspect-square w-[68%] max-w-[300px] sm:max-w-[380px] md:w-full md:max-w-[460px]"
+                      className="relative aspect-[33/47] w-[48%] max-w-[185px] sm:max-w-[240px] md:w-full md:max-w-[440px]"
                       animate={{
                         x: active ? 0 : 50,
                         scale: active ? 1 : 0.85,
@@ -115,15 +118,15 @@ export default function HeroSlider() {
                     >
                       {/* Glow di belakang produk */}
                       <div
-                        className="absolute inset-[12%] rounded-full blur-3xl"
-                        style={{ background: "radial-gradient(circle, rgba(251,191,36,0.45), transparent 70%)" }}
+                        className="absolute inset-[8%] rounded-full blur-3xl"
+                        style={{ background: "radial-gradient(circle, rgba(251,191,36,0.5), transparent 70%)" }}
                       />
                       <Image
                         src={s.image}
                         alt={`JALAR ${s.level}`}
                         fill
                         priority={i === 0}
-                        sizes="(max-width: 768px) 70vw, 460px"
+                        sizes="(max-width: 768px) 48vw, 440px"
                         className="object-contain drop-shadow-2xl"
                       />
                     </motion.div>

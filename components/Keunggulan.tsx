@@ -26,7 +26,12 @@ export default function Keunggulan() {
 
         <div className="mt-16 grid gap-6 sm:grid-cols-2">
           {features.map((f, i) => {
-            const Icon = ICONS[f.icon] ?? Wheat;
+            const Icon = ICONS[f.icon] ?? (() => {
+              if (process.env.NODE_ENV === "development") {
+                console.warn(`[Keunggulan] Unknown icon key: "${f.icon}" — falling back to Wheat`);
+              }
+              return Wheat;
+            })();
             return (
               <Reveal key={f.title} delay={i * 0.08}>
                 <div className="flex h-full items-start gap-5 rounded-3xl border border-jalar-red/10 bg-white p-7 shadow-sm transition hover:border-jalar-red/30 hover:shadow-md">

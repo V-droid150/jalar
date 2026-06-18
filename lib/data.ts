@@ -6,6 +6,14 @@ export function waLink(message: string) {
   return `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(message)}`;
 }
 
+export function formatIDR(value: number) {
+  return new Intl.NumberFormat("id-ID", {
+    style: "currency",
+    currency: "IDR",
+    minimumFractionDigits: 0,
+  }).format(value);
+}
+
 export const TAGLINE = "Nggak Ada Rem-nya.";
 
 // ── Hero slides ───────────────────────────────────────────────────────────────
@@ -70,9 +78,14 @@ export type Product = {
   image: string;
   desc: string;
   heat: number;
+  price: number;
   cardBg: string;
   featured?: boolean;
 };
+
+export function getProduct(id: number) {
+  return products.find((p) => p.id === id);
+}
 
 export const products: Product[] = [
   {
@@ -83,6 +96,7 @@ export const products: Product[] = [
     image: "/images/jalar-bag-1.png",
     desc: "Enak dulu, panas belakangan. Cocok buat pemanasan.",
     heat: 1,
+    price: 22000,
     cardBg: "linear-gradient(160deg, #b8480a 0%, #7a2e05 100%)",
   },
   {
@@ -93,6 +107,7 @@ export const products: Product[] = [
     image: "/images/jalar-bag-2.png",
     desc: "Mulai serius. Masih mau lanjut?",
     heat: 2,
+    price: 25000,
     cardBg: "linear-gradient(160deg, #a8341f 0%, #6b1a10 100%)",
     featured: true,
   },
@@ -104,6 +119,7 @@ export const products: Product[] = [
     image: "/images/jalar-bag-3.png",
     desc: "Ini bukan buat semua orang.",
     heat: 3,
+    price: 28000,
     cardBg: "linear-gradient(160deg, #5e1010 0%, #2a0606 100%)",
   },
 ];
@@ -117,8 +133,25 @@ export const features = [
 ];
 
 // ── Testimoni ─────────────────────────────────────────────────────────────────
-export const testimonials = [
-  { quote: "Udah coba banyak keripik pedas, JALAR 3 yang paling nggak bisa berhenti.", name: "Rizky", city: "Bandung" },
-  { quote: "Pedesnya nagih tapi nggak bikin mules. Ini yang susah dicari.", name: "Sari", city: "Jakarta" },
-  { quote: "Beli buat oleh-oleh, habis di jalan. Terpaksa pesan lagi.", name: "Dimas", city: "Surabaya" },
+export type Testimonial = {
+  id: number;
+  quote: string;
+  name: string;
+  city: string;
+  avatar: string;
+};
+
+// Foto profil pakai layanan avatar pravatar.cc (dipakai via <img>, frame dibulatkan
+// di komponen). Ganti `avatar` dgn foto asli kapan saja — frame tetap bulat & fit.
+export const testimonials: Testimonial[] = [
+  { id: 1, quote: "Udah coba banyak keripik pedas, JALAR 3 yang paling nggak bisa berhenti.", name: "Rizky", city: "Bandung", avatar: "https://i.pravatar.cc/160?img=12" },
+  { id: 2, quote: "Pedesnya nagih tapi nggak bikin mules. Ini yang susah dicari.", name: "Sari", city: "Jakarta", avatar: "https://i.pravatar.cc/160?img=5" },
+  { id: 3, quote: "Beli buat oleh-oleh, habis di jalan. Terpaksa pesan lagi.", name: "Dimas", city: "Surabaya", avatar: "https://i.pravatar.cc/160?img=33" },
+  { id: 4, quote: "Level 2 pas banget. Renyahnya beda dari keripik biasa.", name: "Nadia", city: "Yogyakarta", avatar: "https://i.pravatar.cc/160?img=47" },
+  { id: 5, quote: "Awalnya nantang temen, eh malah aku yang ketagihan sendiri.", name: "Bagas", city: "Semarang", avatar: "https://i.pravatar.cc/160?img=15" },
+  { id: 6, quote: "Pedes maut tapi rasanya tetap kebaca. Bukan sekadar pedes doang.", name: "Putri", city: "Medan", avatar: "https://i.pravatar.cc/160?img=9" },
+  { id: 7, quote: "Packaging-nya kece, isinya lebih kece. Worth banget.", name: "Fajar", city: "Makassar", avatar: "https://i.pravatar.cc/160?img=51" },
+  { id: 8, quote: "Cocok nemenin nonton bola. Sekali buka langsung ludes bertiga.", name: "Intan", city: "Denpasar", avatar: "https://i.pravatar.cc/160?img=24" },
+  { id: 9, quote: "Aku nggak kuat pedes, Level 1 ramah banget di lidah. Suka!", name: "Yoga", city: "Malang", avatar: "https://i.pravatar.cc/160?img=60" },
+  { id: 10, quote: "Order lagi buat ketiga kalinya bulan ini. Cukup jelas ya.", name: "Mega", city: "Bekasi", avatar: "https://i.pravatar.cc/160?img=44" },
 ];

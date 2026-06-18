@@ -16,7 +16,7 @@ const inter = Inter({
   display: "swap",
 });
 
-const SITE_URL = "https://jalar.vercel.app";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://jalar.vercel.app";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
