@@ -1,5 +1,5 @@
 // Buat favicon JALAR (kotak) dari wordmark header public/images/logo.png:
-// logo di-scale & dikomposit di atas latar gelap-merah berglow (tema "api").
+// logo di-scale & ditaruh di kanvas TRANSPARAN (tanpa latar).
 // Murni Node (decode + encode PNG sendiri, tanpa dependency) — pola sama dgn
 // trim-images.mjs. Output: app/icon.png (512) + app/apple-icon.png (512).
 // Jalankan ulang jika logo.png diganti:  node scripts/gen-favicon.mjs
@@ -102,25 +102,11 @@ function buildIcon(size) {
   if (!existsSync(LOGO)) throw new Error("public/images/logo.png tidak ditemukan");
   const logo = decodePNG(readFileSync(LOGO));
 
-  // Latar: glow ember radial (hangat di tengah → gelap di tepi).
+  // Kanvas TRANSPARAN (semua nol) — tanpa latar.
   const out = Buffer.alloc(size * size * 4);
-  const cx = size / 2, cy = size * 0.46, maxR = size * 0.72;
-  const inner = [74, 22, 6], outer = [13, 1, 1];
-  for (let y = 0; y < size; y++) {
-    for (let x = 0; x < size; x++) {
-      const d = Math.hypot(x - cx, y - cy) / maxR;
-      let t = Math.max(0, Math.min(1, d));
-      t = t * t * (3 - 2 * t); // smoothstep
-      const i = (y * size + x) * 4;
-      out[i] = Math.round(inner[0] + (outer[0] - inner[0]) * t);
-      out[i + 1] = Math.round(inner[1] + (outer[1] - inner[1]) * t);
-      out[i + 2] = Math.round(inner[2] + (outer[2] - inner[2]) * t);
-      out[i + 3] = 255;
-    }
-  }
 
   // Scale logo agar muat dalam kotak (size - 2*pad), pertahankan rasio.
-  const pad = Math.round(size * 0.16);
+  const pad = Math.round(size * 0.1);
   const box = size - pad * 2;
   const scale = Math.min(box / logo.w, box / logo.h);
   const lw = Math.max(1, Math.round(logo.w * scale));
@@ -129,17 +115,17 @@ function buildIcon(size) {
   const ox = Math.round((size - lw) / 2);
   const oy = Math.round((size - lh) / 2);
 
-  // Komposit "over" (logo premultiplied di atas latar opaque).
+  // Taruh logo ke kanvas transparan, un-premultiply → alpha lurus (PNG normal).
   for (let y = 0; y < lh; y++) {
     for (let x = 0; x < lw; x++) {
-      const a = scaled[(y * lw + x) * 4 + 3];
+      const si = (y * lw + x) * 4;
+      const a = scaled[si + 3];
       if (a === 0) continue;
       const di = ((oy + y) * size + (ox + x)) * 4;
-      const inv = (255 - a) / 255;
-      out[di] = Math.min(255, scaled[(y * lw + x) * 4] + out[di] * inv);
-      out[di + 1] = Math.min(255, scaled[(y * lw + x) * 4 + 1] + out[di + 1] * inv);
-      out[di + 2] = Math.min(255, scaled[(y * lw + x) * 4 + 2] + out[di + 2] * inv);
-      out[di + 3] = 255;
+      out[di] = Math.min(255, Math.round((scaled[si] * 255) / a));
+      out[di + 1] = Math.min(255, Math.round((scaled[si + 1] * 255) / a));
+      out[di + 2] = Math.min(255, Math.round((scaled[si + 2] * 255) / a));
+      out[di + 3] = a;
     }
   }
   return encodePNG(size, size, out);
