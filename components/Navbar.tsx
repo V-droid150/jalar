@@ -5,9 +5,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { ShoppingCart, Flame } from "lucide-react";
 import FireButton from "@/components/FireButton";
+import { useCart } from "@/lib/cart";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
+  const { count } = useCart();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 80);
@@ -37,15 +39,31 @@ export default function Navbar() {
           />
         </Link>
 
-        {/* Checkout CTA — tombol berbentuk api, di kanan */}
+        {/* Checkout CTA — hanya aktif kalau keranjang ada isinya. Saat kosong
+            tombol disabled (tak bisa diklik) agar tak nyasar ke checkout kosong. */}
         <div className="absolute right-5 top-1/2 -translate-y-1/2 sm:right-8">
-          <FireButton href="/checkout" size="sm" className="px-4 sm:px-5">
-            <span className="relative">
+          {count > 0 ? (
+            <div className="relative">
+              <FireButton href="/checkout" size="sm" className="px-4 sm:px-5">
+                <span className="relative">
+                  <ShoppingCart className="h-5 w-5" />
+                  <Flame className="absolute -right-1.5 -top-2 h-3 w-3 fill-current text-red-700" />
+                </span>
+                <span className="hidden sm:inline">Checkout</span>
+              </FireButton>
+              <span
+                aria-label={`${count} item di keranjang`}
+                className="pointer-events-none absolute -right-2 -top-2 z-10 flex h-5 min-w-[20px] items-center justify-center rounded-full border-2 border-jalar-dark bg-white px-1 text-[11px] font-extrabold leading-none text-jalar-red"
+              >
+                {count}
+              </span>
+            </div>
+          ) : (
+            <FireButton size="sm" disabled className="px-4 sm:px-5">
               <ShoppingCart className="h-5 w-5" />
-              <Flame className="absolute -right-1.5 -top-2 h-3 w-3 fill-current text-red-700" />
-            </span>
-            <span className="hidden sm:inline">Checkout</span>
-          </FireButton>
+              <span className="hidden sm:inline">Checkout</span>
+            </FireButton>
+          )}
         </div>
       </nav>
 

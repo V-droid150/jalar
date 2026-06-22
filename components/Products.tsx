@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { ArrowRight, Minus, Plus } from "lucide-react";
+import { Check, ShoppingCart, Minus, Plus } from "lucide-react";
 import { products, formatIDR, type Product } from "@/lib/data";
+import { addToCart } from "@/lib/cart";
 import Reveal from "@/components/Reveal";
 import FireButton from "@/components/FireButton";
 
@@ -27,8 +28,19 @@ function Heat({ heat, color }: { heat: number; color: string }) {
 
 function ProductCard({ p }: { p: Product }) {
   const [qty, setQty] = useState(1);
+  const [added, setAdded] = useState(false);
+  const timer = useRef<ReturnType<typeof setTimeout>>();
   const dec = () => setQty((q) => Math.max(1, q - 1));
   const inc = () => setQty((q) => Math.min(99, q + 1));
+
+  useEffect(() => () => clearTimeout(timer.current), []);
+
+  const handleAdd = () => {
+    addToCart(p.id, qty);
+    setAdded(true);
+    clearTimeout(timer.current);
+    timer.current = setTimeout(() => setAdded(false), 1600);
+  };
 
   return (
     <motion.div
@@ -93,8 +105,16 @@ function ProductCard({ p }: { p: Product }) {
         </div>
 
         <div className="mt-auto pt-5">
-          <FireButton href={`/checkout?product=${p.id}&qty=${qty}`} className="w-full">
-            Cobain Sekarang <ArrowRight className="h-4 w-4" />
+          <FireButton onClick={handleAdd} className="w-full">
+            {added ? (
+              <>
+                Ditambahkan <Check className="h-4 w-4" />
+              </>
+            ) : (
+              <>
+                Tambah ke Keranjang <ShoppingCart className="h-4 w-4" />
+              </>
+            )}
           </FireButton>
         </div>
       </div>

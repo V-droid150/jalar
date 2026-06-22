@@ -2,11 +2,13 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { slides } from "@/lib/data";
+import { addToCart } from "@/lib/cart";
 import FireButton from "@/components/FireButton";
 
 function HeatRow({ heat, label, color }: { heat: number; label: string; color: string }) {
@@ -32,6 +34,7 @@ function HeatRow({ heat, label, color }: { heat: number; label: string; color: s
 }
 
 export default function HeroSlider() {
+  const router = useRouter();
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: "center" }, [
     Autoplay({ delay: 4000, stopOnInteraction: true, stopOnMouseEnter: true, stopOnFocusIn: true }),
   ]);
@@ -100,7 +103,12 @@ export default function HeroSlider() {
                     <p className="mt-2 text-sm text-white/70">{s.subtext}</p>
                     <HeatRow heat={s.heat} label={s.heatLabel} color={s.levelColor} />
                     <div className="mt-7">
-                      <FireButton href={`/checkout?product=${s.id}&qty=1`}>
+                      <FireButton
+                        onClick={() => {
+                          addToCart(s.id, 1);
+                          router.push("/checkout");
+                        }}
+                      >
                         {s.cta} <ArrowRight className="h-4 w-4" />
                       </FireButton>
                     </div>

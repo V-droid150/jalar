@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
-import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
-import { getProduct, products } from "@/lib/data";
 import Footer from "@/components/Footer";
 import CheckoutClient from "./CheckoutClient";
 
@@ -12,27 +10,7 @@ export const metadata: Metadata = {
   description: "Selesaikan pesanan keripik pedas JALAR kamu.",
 };
 
-export default function CheckoutPage({
-  searchParams,
-}: {
-  searchParams?: { product?: string; qty?: string };
-}) {
-  // Jika param product ada tapi tidak valid / tidak dikenal → 404 (bukan diam-diam
-  // menampilkan produk lain). Tanpa param sama sekali → default ke produk pertama.
-  const rawProduct = searchParams?.product;
-  // Hanya terima string integer murni (mis. "1", "2", "3") — tolak "1.0", " 1 ", "1e0", dll.
-  const isStrictInt = rawProduct != null && /^\d+$/.test(rawProduct);
-  const parsedId = isStrictInt ? Number(rawProduct) : NaN;
-  const resolved = parsedId > 0 ? getProduct(parsedId) : undefined;
-  if (rawProduct != null && rawProduct !== "" && !resolved) notFound();
-  const product = resolved ?? products[0];
-  if (!product) notFound();
-
-  const parsedQty = Number(searchParams?.qty);
-  const qty = Number.isFinite(parsedQty)
-    ? Math.min(99, Math.max(1, Math.trunc(parsedQty)))
-    : 1;
-
+export default function CheckoutPage() {
   return (
     <main className="min-h-screen bg-jalar-dark">
       {/* Header ringkas */}
@@ -51,7 +29,7 @@ export default function CheckoutPage({
         <div className="ember-line pointer-events-none h-[2px] w-full" />
       </header>
 
-      <CheckoutClient product={product} initialQty={qty} />
+      <CheckoutClient />
       <Footer />
     </main>
   );
