@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Minus, Plus, Trash2, ArrowRight, ShieldCheck, Truck, ShoppingCart } from "lucide-react";
 import { formatIDR, waLink, getProduct, type Product } from "@/lib/data";
-import { useCart, setQty, removeFromCart } from "@/lib/cart";
+import { useCart, setQty, removeFromCart, clearCart } from "@/lib/cart";
 import FireButton from "@/components/FireButton";
 
 // URL dasar situs (untuk membentuk link gambar absolut di pesan WhatsApp).
@@ -102,8 +102,9 @@ export default function CheckoutClient() {
                       <span className="w-8 text-center font-display text-lg text-white">{l.qty}</span>
                       <button
                         onClick={() => setQty(l.product.id, l.qty + 1)}
+                        disabled={l.qty >= 99}
                         aria-label="Tambah"
-                        className="flex h-8 w-8 items-center justify-center rounded-full text-white transition hover:bg-white/15 active:scale-95"
+                        className="flex h-8 w-8 items-center justify-center rounded-full text-white transition hover:bg-white/15 active:scale-95 disabled:opacity-40"
                       >
                         <Plus className="h-4 w-4" />
                       </button>
@@ -146,7 +147,8 @@ export default function CheckoutClient() {
           </div>
 
           <div className="mt-6">
-            <FireButton href={wa} external size="lg" className="w-full">
+            {/* Buka WhatsApp (href dievaluasi saat klik) lalu kosongkan keranjang. */}
+            <FireButton href={wa} external size="lg" className="w-full" onClick={clearCart}>
               Order via WhatsApp <ArrowRight className="h-5 w-5" />
             </FireButton>
           </div>

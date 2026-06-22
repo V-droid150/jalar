@@ -39,7 +39,11 @@ export function verifySignature(payload: {
     .createHash("sha512")
     .update(payload.order_id + payload.status_code + payload.gross_amount + serverKey())
     .digest("hex");
-  return expected === payload.signature_key;
+  const actual = payload.signature_key ?? "";
+  // Bandingkan konstan-waktu (anti timing attack). Panjang beda → langsung gagal
+  // (timingSafeEqual butuh buffer sama panjang).
+  if (expected.length !== actual.length) return false;
+  return crypto.timingSafeEqual(Buffer.from(expected), Buffer.from(actual));
 }
 
 // Buat order_id unik & mudah dibaca: JALAR-<base36 timestamp>-<4 char acak>

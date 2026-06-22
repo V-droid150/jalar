@@ -86,8 +86,10 @@ function subscribe(cb: () => void) {
   };
   window.addEventListener("jalar:cart", onCart);
   window.addEventListener("storage", onStorage);
-  // Hidrasi dari localStorage saat komponen pertama subscribe (setelah mount).
-  syncFromStorage();
+  // Hidrasi dari localStorage DITUNDA via microtask: useSyncExternalStore melarang
+  // memanggil callback secara sinkron selama fase subscribe. queueMicrotask membuat
+  // syncFromStorage (yang bisa memicu emit→cb) berjalan setelah subscribe selesai.
+  queueMicrotask(syncFromStorage);
   return () => {
     window.removeEventListener("jalar:cart", onCart);
     window.removeEventListener("storage", onStorage);

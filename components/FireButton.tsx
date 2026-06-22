@@ -16,6 +16,7 @@ export default function FireButton({
   size = "md",
   className = "",
   disabled = false,
+  tabIndex,
 }: {
   href?: string;
   external?: boolean;
@@ -24,6 +25,7 @@ export default function FireButton({
   size?: "sm" | "md" | "lg";
   className?: string;
   disabled?: boolean;
+  tabIndex?: number;
 }) {
   const pad =
     size === "lg"
@@ -49,14 +51,14 @@ export default function FireButton({
 
   if (href && external) {
     return (
-      <a href={href} target="_blank" rel="noopener noreferrer" className={cls}>
+      <a href={href} target="_blank" rel="noopener noreferrer" onClick={onClick} tabIndex={tabIndex} className={cls}>
         {inner}
       </a>
     );
   }
   if (href) {
     return (
-      <Link href={href} className={cls}>
+      <Link href={href} onClick={onClick} tabIndex={tabIndex} className={cls}>
         {inner}
       </Link>
     );
@@ -67,6 +69,7 @@ export default function FireButton({
       onClick={disabled ? undefined : onClick}
       disabled={disabled}
       aria-disabled={disabled}
+      tabIndex={tabIndex}
       className={cls}
     >
       {inner}

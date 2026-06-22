@@ -62,7 +62,7 @@ export default function HeroSlider() {
           {slides.map((s, i) => {
             const active = i === selected;
             return (
-              <div key={s.id} className="embla__slide relative">
+              <div key={s.id} className="embla__slide relative" aria-hidden={!active}>
                 {/* Background gradient */}
                 <div className="absolute inset-0" style={{ background: s.gradient }} />
                 {/* Dekorasi */}
@@ -104,7 +104,11 @@ export default function HeroSlider() {
                     <HeatRow heat={s.heat} label={s.heatLabel} color={s.levelColor} />
                     <div className="mt-7">
                       <FireButton
+                        tabIndex={active ? undefined : -1}
                         onClick={() => {
+                          // Slide non-aktif (di luar layar) tak boleh memesan produk
+                          // walau tombolnya sempat ter-fokus via keyboard.
+                          if (!active) return;
                           addToCart(s.id, 1);
                           router.push("/checkout");
                         }}

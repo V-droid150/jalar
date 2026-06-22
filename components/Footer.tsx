@@ -4,11 +4,13 @@ import Image from "next/image";
 import { MessageCircle, Instagram, Mail } from "lucide-react";
 import { TAGLINE, waLink } from "@/lib/data";
 
+// Path absolut + hash (mis. "/#produk") agar anchor tetap mengarah ke section
+// beranda walau footer dirender di halaman lain (mis. /checkout).
 const NAV = [
-  { label: "Produk", href: "#produk" },
-  { label: "Tentang", href: "#tentang" },
-  { label: "Keunggulan", href: "#keunggulan" },
-  { label: "Order", href: "#order" },
+  { label: "Produk", href: "/#produk" },
+  { label: "Tentang", href: "/#tentang" },
+  { label: "Keunggulan", href: "/#keunggulan" },
+  { label: "Order", href: "/#order" },
 ];
 
 const SOCIALS = [
