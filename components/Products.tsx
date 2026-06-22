@@ -115,7 +115,7 @@ export default function Products() {
           </Reveal>
         </div>
 
-        <div className="mt-16 grid gap-7 md:grid-cols-3">
+        <div className="mt-16 grid gap-6 sm:grid-cols-2 sm:gap-7 lg:grid-cols-3">
           {products.map((p, i) => (
             <Reveal key={p.id} delay={i * 0.1} className="h-full">
               <ProductCard p={p} />

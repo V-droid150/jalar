@@ -53,13 +53,13 @@ export default function HeroSlider() {
   }, [emblaApi, onSelect]);
 
   return (
-    <section className="relative h-[100svh] w-full overflow-hidden">
-      <div className="embla h-full" ref={emblaRef}>
-        <div className="embla__container h-full">
+    <section className="relative w-full overflow-hidden">
+      <div className="embla" ref={emblaRef}>
+        <div className="embla__container">
           {slides.map((s, i) => {
             const active = i === selected;
             return (
-              <div key={s.id} className="embla__slide relative h-full">
+              <div key={s.id} className="embla__slide relative">
                 {/* Background gradient */}
                 <div className="absolute inset-0" style={{ background: s.gradient }} />
                 {/* Dekorasi */}
@@ -73,8 +73,9 @@ export default function HeroSlider() {
                 </span>
                 <div className="pointer-events-none absolute -left-1/4 top-0 h-[140%] w-44 rotate-12 bg-white/[0.06] blur-3xl" />
 
-                {/* Konten */}
-                <div className="relative z-10 mx-auto grid h-full max-w-7xl grid-cols-1 items-center gap-3 px-5 pb-20 pt-20 sm:gap-6 sm:px-8 md:grid-cols-2 md:gap-8 md:pb-0 md:pt-0">
+                {/* Konten — min-h penuh layar; di HP kecil boleh memanjang agar
+                    CTA & teks TIDAK terpotong (sebelumnya h-full + overflow clip). */}
+                <div className="relative z-10 mx-auto grid min-h-[100svh] max-w-7xl grid-cols-1 items-center gap-4 px-5 pb-24 pt-24 sm:gap-6 sm:px-8 md:grid-cols-2 md:gap-8 md:pb-0 md:pt-0">
                   {/* Teks */}
                   <div className="order-2 text-center md:order-1 md:text-left">
                     <p className="text-[11px] font-semibold uppercase tracking-[0.35em] text-white/80">
