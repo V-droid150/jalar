@@ -63,17 +63,21 @@ export default function HeroSlider() {
             const active = i === selected;
 
             // Slide poster: gambar full-bleed (poster sudah memuat teks & produk).
+            // Art-direction: poster portrait di HP, landscape di >=768px — browser
+            // hanya mengunduh yang cocok via <picture><source media>.
             if (s.poster) {
               return (
                 <div key={s.id} className="embla__slide relative min-h-[100svh]" aria-hidden={!active}>
-                  <Image
-                    src={s.image}
-                    alt="JALAR — Rasa Pedas Membara"
-                    fill
-                    priority={i === 0}
-                    sizes="100vw"
-                    className="object-cover object-center"
-                  />
+                  <picture>
+                    <source media="(min-width: 768px)" srcSet={s.image} />
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={s.imageMobile ?? s.image}
+                      alt="JALAR — Rasa Pedas Membara"
+                      decoding="async"
+                      className="absolute inset-0 h-full w-full object-cover object-center"
+                    />
+                  </picture>
                 </div>
               );
             }

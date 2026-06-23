@@ -20,6 +20,7 @@ export const TAGLINE = "Nggak Ada Rem-nya.";
 export type Slide = {
   id: number;
   poster?: boolean; // true = tampilkan gambar full-bleed (poster jadi), tanpa layout teks+produk
+  imageMobile?: string; // poster versi portrait utk layar HP (art-direction)
   level: string;
   levelColor: string;
   gradient: string;
@@ -38,6 +39,7 @@ export const slides: Slide[] = [
     id: 0,
     poster: true,
     image: "/images/hero-poster.jpg",
+    imageMobile: "/images/hero-poster-mobile.jpg",
     level: "",
     levelColor: "#f97316",
     gradient: "#0d0000",
