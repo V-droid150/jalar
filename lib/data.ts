@@ -19,6 +19,7 @@ export const TAGLINE = "Nggak Ada Rem-nya.";
 // ── Hero slides ───────────────────────────────────────────────────────────────
 export type Slide = {
   id: number;
+  poster?: boolean; // true = tampilkan gambar full-bleed (poster jadi), tanpa layout teks+produk
   level: string;
   levelColor: string;
   gradient: string;
@@ -31,6 +32,21 @@ export type Slide = {
 };
 
 export const slides: Slide[] = [
+  {
+    // Slide pembuka: poster peluncuran (full-bleed). Field di bawah dummy — tak
+    // dirender untuk slide poster (lihat HeroSlider).
+    id: 0,
+    poster: true,
+    image: "/images/hero-poster.jpg",
+    level: "",
+    levelColor: "#f97316",
+    gradient: "#0d0000",
+    tagline: "",
+    subtext: "",
+    heat: 0,
+    heatLabel: "",
+    cta: "",
+  },
   {
     id: 1,
     level: "LEVEL 1",

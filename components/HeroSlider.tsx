@@ -61,6 +61,23 @@ export default function HeroSlider() {
         <div className="embla__container">
           {slides.map((s, i) => {
             const active = i === selected;
+
+            // Slide poster: gambar full-bleed (poster sudah memuat teks & produk).
+            if (s.poster) {
+              return (
+                <div key={s.id} className="embla__slide relative min-h-[100svh]" aria-hidden={!active}>
+                  <Image
+                    src={s.image}
+                    alt="JALAR — Rasa Pedas Membara"
+                    fill
+                    priority={i === 0}
+                    sizes="100vw"
+                    className="object-cover object-center"
+                  />
+                </div>
+              );
+            }
+
             return (
               <div key={s.id} className="embla__slide relative" aria-hidden={!active}>
                 {/* Background gradient */}
