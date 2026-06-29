@@ -49,7 +49,7 @@ export default function Navbar() {
                   <ShoppingCart className="h-5 w-5" />
                   <Flame className="absolute -right-1.5 -top-2 h-3 w-3 fill-current text-red-700" />
                 </span>
-                <span className="hidden sm:inline">Checkout</span>
+                <span className="sr-only sm:not-sr-only">Checkout</span>
               </FireButton>
               <span
                 aria-label={`${count} item di keranjang`}
@@ -61,7 +61,7 @@ export default function Navbar() {
           ) : (
             <FireButton size="sm" disabled className="px-4 sm:px-5">
               <ShoppingCart className="h-5 w-5" />
-              <span className="hidden sm:inline">Checkout</span>
+              <span className="sr-only sm:not-sr-only">Checkout</span>
             </FireButton>
           )}
         </div>

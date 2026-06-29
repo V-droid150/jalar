@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { Check, ShoppingCart, Minus, Plus } from "lucide-react";
 import { products, formatIDR, type Product } from "@/lib/data";
 import { addToCart } from "@/lib/cart";
@@ -32,6 +32,7 @@ function ProductCard({ p }: { p: Product }) {
   const timer = useRef<ReturnType<typeof setTimeout>>();
   const dec = () => setQty((q) => Math.max(1, q - 1));
   const inc = () => setQty((q) => Math.min(99, q + 1));
+  const reduce = useReducedMotion();
 
   useEffect(() => () => clearTimeout(timer.current), []);
 
@@ -44,7 +45,7 @@ function ProductCard({ p }: { p: Product }) {
 
   return (
     <motion.div
-      whileHover={{ y: -8 }}
+      whileHover={reduce ? undefined : { y: -8 }}
       transition={{ type: "spring", stiffness: 300, damping: 20 }}
       className="group relative flex h-full flex-col overflow-hidden rounded-3xl border border-white/10 p-7 shadow-xl shadow-black/30 transition-shadow hover:shadow-[0_24px_60px_rgba(220,38,38,0.25)]"
       style={{ background: p.cardBg }}
@@ -88,16 +89,18 @@ function ProductCard({ p }: { p: Product }) {
           <div className="flex items-center gap-1 rounded-full border border-white/20 bg-black/20 p-1">
             <button
               onClick={dec}
+              disabled={qty <= 1}
               aria-label="Kurangi"
-              className="flex h-8 w-8 items-center justify-center rounded-full text-white transition hover:bg-white/15 active:scale-95"
+              className="flex h-8 w-8 items-center justify-center rounded-full text-white transition hover:bg-white/15 active:scale-95 disabled:opacity-40"
             >
               <Minus className="h-4 w-4" />
             </button>
             <span className="w-8 text-center font-display text-xl text-white">{qty}</span>
             <button
               onClick={inc}
+              disabled={qty >= 99}
               aria-label="Tambah"
-              className="flex h-8 w-8 items-center justify-center rounded-full text-white transition hover:bg-white/15 active:scale-95"
+              className="flex h-8 w-8 items-center justify-center rounded-full text-white transition hover:bg-white/15 active:scale-95 disabled:opacity-40"
             >
               <Plus className="h-4 w-4" />
             </button>

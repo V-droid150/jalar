@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { slides } from "@/lib/data";
 import { addToCart } from "@/lib/cart";
@@ -35,9 +35,17 @@ function HeatRow({ heat, label, color }: { heat: number; label: string; color: s
 
 export default function HeroSlider() {
   const router = useRouter();
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: "center" }, [
-    Autoplay({ delay: 4000, stopOnInteraction: true, stopOnMouseEnter: true, stopOnFocusIn: true }),
-  ]);
+  // PRM untuk Embla (dibaca SINKRON sekali agar plugin autoplay konsisten sejak init).
+  const [prefersReduced] = useState(
+    () => typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+  );
+  const reduce = useReducedMotion();
+  const [emblaRef, emblaApi] = useEmblaCarousel(
+    { loop: !prefersReduced, align: "center" },
+    prefersReduced
+      ? []
+      : [Autoplay({ delay: 4000, stopOnInteraction: true, stopOnMouseEnter: true, stopOnFocusIn: true })],
+  );
   const [selected, setSelected] = useState(0);
 
   const onSelect = useCallback(() => {
@@ -74,7 +82,8 @@ export default function HeroSlider() {
                     <img
                       src={s.imageMobile ?? s.image}
                       alt="JALAR — Rasa Pedas Membara"
-                      decoding="async"
+                      fetchPriority="high"
+                      decoding="sync"
                       className="absolute inset-0 h-full w-full object-cover object-center"
                     />
                   </picture>
@@ -144,8 +153,8 @@ export default function HeroSlider() {
                     <motion.div
                       className="relative aspect-[33/47] w-[48%] max-w-[185px] sm:max-w-[240px] md:w-full md:max-w-[440px]"
                       animate={{
-                        x: active ? 0 : 50,
-                        scale: active ? 1 : 0.85,
+                        x: reduce ? 0 : active ? 0 : 50,
+                        scale: reduce ? 1 : active ? 1 : 0.85,
                         opacity: active ? 1 : 0.4,
                       }}
                       transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
@@ -159,7 +168,7 @@ export default function HeroSlider() {
                         src={s.image}
                         alt={`JALAR ${s.level}`}
                         fill
-                        priority={i === 0}
+                        priority={i === 1}
                         sizes="(max-width: 768px) 48vw, 440px"
                         className="object-contain drop-shadow-2xl"
                       />
@@ -179,6 +188,7 @@ export default function HeroSlider() {
             key={s.id}
             onClick={() => emblaApi?.scrollTo(i)}
             aria-label={`Slide ${i + 1}`}
+            aria-current={i === selected ? "true" : undefined}
             className={`h-2.5 rounded-full transition-all duration-300 ${
               i === selected ? "w-8 bg-white" : "w-2.5 bg-white/40 hover:bg-white/70"
             }`}

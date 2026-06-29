@@ -53,7 +53,7 @@ export default function Testimonials() {
       </div>
 
       {/* Auto infinity slider — jeda saat hover */}
-      <div className="marquee-wrap marquee-mask mt-14 w-full">
+      <div className="marquee-wrap marquee-mask mt-14 w-full" role="region" aria-label="Testimoni pelanggan">
         <div className="marquee-track">
           {loop.map((t, i) => (
             <TestimonialCard key={`${t.id}-${i}`} t={t} />
